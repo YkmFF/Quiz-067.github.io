@@ -1,66 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Unblocked Game Launcher</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f7ff;
-      text-align: center;
-      margin-top: 40px;
-    }
-    #main {
-      background: #fff;
-      display: inline-block;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.12);
-    }
-    .url {
-      margin-top: 20px;
-      font-size: 1.1em;
-      color: #4b7bec;
-    }
-    .score {
-      font-size:2em;
-      margin:20px;
-    }
-    #clickBtn {
-      padding: 14px 40px;
-      font-size: 1.2em;
-      background: #70a1ff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    #clickBtn:hover {
-      background: #1e90ff;
-    }
-  </style>
-</head>
-<body>
-  <div id="main">
-    <h2>Unblocked Clicker Game</h2>
-    <div class="score" id="score">Score: 0</div>
-    <button id="clickBtn">Click Me!</button>
-    <div class="url">
-      🔗 Unblocked via: <a href="https://Quiz-67.github.io" target="_blank">Quiz-67.github.io</a>
-    </div>
-    <p style="margin-top:24px;color:gray;">
-      This page lets you play simple games, unblocked at school!<br>
-      Add more games below or modify code for more fun.<br>
-      (Educational use only!)
-    </p>
-  </div>
-  <script>
-    let score = 0;
-    const scoreEl = document.getElementById('score');
-    document.getElementById('clickBtn').onclick = () => {
-      score++;
-      scoreEl.textContent = "Score: " + score;
-    };
-  </script>
-</body>
-</html># Quiz-67-.github.io
+# Quiz-67-.github.io
+
+This repository contains a tiny demo "Unblocked Clicker Game" intended to be served with GitHub Pages.
+
+Files
+- `index.html` — game page (now added to repository root)
+- `README.md` — this file with publishing instructions
+
+How to publish on GitHub Pages
+1. Make sure `index.html` is in the repository root (done).
+2. Commit and push your changes to the `main` branch:
+
+```bash
+git add index.html README.md
+git commit -m "Add index.html and update README for GitHub Pages"
+git push origin main
+```
+
+3. On GitHub: open the repository page → `Settings` → `Pages` (or `Code and automation` → `Pages`).
+   - For a project site, set the source to `main` branch and folder `/ (root)` and save.
+
+4. After a minute or two your site will be available at:
+
+```
+https://<your-github-username>.github.io/<repo-name>/
+```
+
+Notes specific to this repo
+- Current repo name: `Quiz-67-.github.io` (owner: `YkmFF`). The Pages URL will therefore be:
+
+```
+https://ykmff.github.io/Quiz-67-.github.io/
+```
+
+- If you want the site at the top-level `https://ykmff.github.io/` instead, rename the repository on GitHub to `ykmff.github.io` (lowercase), then push `index.html` to its root. GitHub will serve the user/organization site from that repo.
+
+If you want, I can run the `git` commands to commit and push for you from this environment, or guide you through renaming the repository on GitHub. Which would you prefer?
+
+Search feature
+
+- A DuckDuckGo search box has been added to `index.html`. It opens DuckDuckGo search results in a new tab when you submit a query.
+- This does NOT act as a proxy and will not bypass any school/network blocks. If DuckDuckGo is blocked on your network, the search will fail to load there.
+
+If you'd like more functionality (for example: showing Instant Answers from DuckDuckGo on the page), I can add that — still without any proxying.
