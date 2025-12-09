@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rock Paper Scissors</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-width: 450px;
+    }
+    h1 { color: #667eea; margin-top: 0; }
+    .scores {
+      display: flex;
+      justify-content: space-around;
+      font-size: 1.2em;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .result { font-size: 1.3em; margin: 20px 0; min-height: 30px; color: #667eea; }
+    .choices {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+    }
+    .choice-btn {
+      font-size: 2.5em;
+      padding: 20px;
+      background: white;
+      border: 3px solid #667eea;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .choice-btn:hover {
+      background: #f0f0f0;
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    .button-group { display: flex; gap: 10px; justify-content: center; }
+    button {
+      padding: 10px 20px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    button:hover { background: #764ba2; transform: translateY(-2px); }
+    .back {
+      background: rgba(102, 126, 234, 0.2);
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎲 Rock Paper Scissors</h1>
+    <div class="scores">
+      <div>You: <span id="playerScore">0</span></div>
+      <div>Computer: <span id="computerScore">0</span></div>
+    </div>
+    <div class="result" id="result">Make your choice!</div>
+    <div class="choices">
+      <button class="choice-btn" onclick="play('rock')">🪨</button>
+      <button class="choice-btn" onclick="play('paper')">📄</button>
+      <button class="choice-btn" onclick="play('scissors')">✂️</button>
+    </div>
+    <div class="button-group">
+      <button onclick="location.reload()">Reset</button>
+      <button class="back" onclick="window.location.href='../games.html'">← Back</button>
+    </div>
+  </div>
+  
+  <script>
+    let playerScore = 0, computerScore = 0;
+    
+    function play(choice) {
+      const choices = ['rock', 'paper', 'scissors'];
+      const computer = choices[Math.floor(Math.random() * 3)];
+      
+      let result = '';
+      if (choice === computer) {
+        result = "It's a tie!";
+      } else if (
+        (choice === 'rock' && computer === 'scissors') ||
+        (choice === 'paper' && computer === 'rock') ||
+        (choice === 'scissors' && computer === 'paper')
+      ) {
+        result = 'You win! 🎉';
+        playerScore++;
+      } else {
+        result = 'Computer wins! 🤖';
+        computerScore++;
+      }
+      
+      const emoji = { rock: '🪨', paper: '📄', scissors: '✂️' };
+      document.getElementById('result').innerHTML = 
+        `You: ${emoji[choice]} vs Computer: ${emoji[computer]}<br>${result}`;
+      document.getElementById('playerScore').textContent = playerScore;
+      document.getElementById('computerScore').textContent = computerScore;
+    }
+  </script>
+</body>
+</html>

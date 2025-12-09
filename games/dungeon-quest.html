@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dungeon Quest - Adventure Game</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-width: 600px;
+    }
+    
+    h1 { color: #667eea; margin-top: 0; }
+    
+    .game-area {
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      position: relative;
+      height: 400px;
+      overflow: hidden;
+    }
+    
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+      font-size: 1.1em;
+      color: #1a1a1a;
+    }
+    
+    .controls {
+      margin: 20px 0;
+      font-size: 0.9em;
+      color: #666;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    
+    button {
+      padding: 10px 20px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    button:hover {
+      background: #764ba2;
+      transform: translateY(-2px);
+    }
+    
+    .back {
+      background: rgba(102, 126, 234, 0.2);
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏰 Dungeon Quest</h1>
+    <div class="stats">
+      <div>Health: <span id="health">100</span></div>
+      <div>Score: <span id="score">0</span></div>
+      <div>Level: <span id="level">1</span></div>
+    </div>
+    <div class="game-area">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+    <div class="controls">
+      Arrow Keys to move • Space to attack • ESC to pause
+    </div>
+    <div class="button-group">
+      <button onclick="location.reload()">Restart</button>
+      <button class="back" onclick="window.location.href='../games.html'">← Back</button>
+    </div>
+  </div>
+  
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 600;
+    canvas.height = 400;
+    
+    const player = { x: 50, y: 350, w: 30, h: 30, vel: 5, health: 100, score: 0 };
+    const enemies = [];
+    const projectiles = [];
+    const keys = {};
+    let level = 1;
+    let gameRunning = true;
+    
+    window.addEventListener('keydown', (e) => {
+      keys[e.key] = true;
+      if (e.key === ' ') spawnProjectile();
+    });
+    window.addEventListener('keyup', (e) => { keys[e.key] = false; });
+    
+    function spawnEnemy() {
+      if (Math.random() < 0.02) {
+        enemies.push({
+          x: Math.random() * (canvas.width - 30),
+          y: 0,
+          w: 30,
+          h: 30,
+          vel: 1 + level * 0.5,
+          health: 1
+        });
+      }
+    }
+    
+    function spawnProjectile() {
+      projectiles.push({
+        x: player.x + player.w / 2,
+        y: player.y,
+        w: 5,
+        h: 15,
+        vel: 8
+      });
+    }
+    
+    function update() {
+      if (keys['ArrowLeft'] && player.x > 0) player.x -= player.vel;
+      if (keys['ArrowRight'] && player.x < canvas.width - player.w) player.x += player.vel;
+      
+      spawnEnemy();
+      
+      projectiles.forEach((p, pi) => {
+        p.y -= p.vel;
+        if (p.y < 0) projectiles.splice(pi, 1);
+      });
+      
+      enemies.forEach((e, ei) => {
+        e.y += e.vel;
+        
+        projectiles.forEach((p, pi) => {
+          if (p.x < e.x + e.w && p.x + p.w > e.x &&
+              p.y < e.y + e.h && p.y + p.h > e.y) {
+            enemies.splice(ei, 1);
+            projectiles.splice(pi, 1);
+            player.score += 10;
+          }
+        });
+        
+        if (player.x < e.x + e.w && player.x + player.w > e.x &&
+            player.y < e.y + e.h && player.y + player.h > e.y) {
+          player.health -= 10;
+          enemies.splice(ei, 1);
+        }
+        
+        if (e.y > canvas.height) enemies.splice(ei, 1);
+      });
+      
+      if (player.score > level * 100) {
+        level++;
+      }
+      
+      if (player.health <= 0) {
+        gameRunning = false;
+        alert(`Game Over! Final Score: ${player.score}`);
+        location.reload();
+      }
+    }
+    
+    function draw() {
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      ctx.fillStyle = '#667eea';
+      ctx.fillRect(player.x, player.y, player.w, player.h);
+      
+      ctx.fillStyle = '#ff6b6b';
+      enemies.forEach(e => ctx.fillRect(e.x, e.y, e.w, e.h));
+      
+      ctx.fillStyle = '#00ff88';
+      projectiles.forEach(p => ctx.fillRect(p.x, p.y, p.w, p.h));
+      
+      document.getElementById('health').textContent = player.health;
+      document.getElementById('score').textContent = player.score;
+      document.getElementById('level').textContent = level;
+    }
+    
+    function gameLoop() {
+      if (gameRunning) {
+        update();
+        draw();
+      }
+      requestAnimationFrame(gameLoop);
+    }
+    
+    gameLoop();
+  </script>
+</body>
+</html>

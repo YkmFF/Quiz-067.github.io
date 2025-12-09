@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flappy Bird Clone</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-width: 400px;
+    }
+    h1 { color: #667eea; margin-top: 0; }
+    .game-area { background: #87ceeb; border-radius: 8px; padding: 10px; margin: 20px 0; }
+    canvas { width: 100%; height: 400px; border: 2px solid #667eea; display: block; border-radius: 6px; }
+    .score { font-size: 1.3em; margin: 20px 0; font-weight: bold; }
+    .button-group { display: flex; gap: 10px; justify-content: center; }
+    button {
+      padding: 10px 20px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    button:hover { background: #764ba2; transform: translateY(-2px); }
+    .back {
+      background: rgba(102, 126, 234, 0.2);
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🐦 Flappy Bird</h1>
+    <div class="score">Score: <span id="score">0</span></div>
+    <div class="game-area">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+    <div style="font-size: 0.9em; color: #666; margin: 10px 0;">Click or Press SPACE to flap!</div>
+    <div class="button-group">
+      <button onclick="location.reload()">Restart</button>
+      <button class="back" onclick="window.location.href='../games.html'">← Back</button>
+    </div>
+  </div>
+  
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 300;
+    canvas.height = 400;
+    
+    const bird = { x: 50, y: 150, w: 30, h: 30, vel: 0, gravity: 0.3, flap: -8 };
+    const pipes = [];
+    let score = 0;
+    let gameRunning = true;
+    const pipeWidth = 50, pipeGap = 100, pipeFreq = 90;
+    let frameCount = 0;
+    
+    function flap() {
+      bird.vel = bird.flap;
+    }
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === ' ') flap();
+    });
+    canvas.addEventListener('click', flap);
+    
+    function update() {
+      if (!gameRunning) return;
+      
+      bird.vel += bird.gravity;
+      bird.y += bird.vel;
+      
+      if (bird.y + bird.h > canvas.height || bird.y < 0) {
+        gameRunning = false;
+        alert(`Game Over! Score: ${score}`);
+        location.reload();
+      }
+      
+      frameCount++;
+      if (frameCount % pipeFreq === 0) {
+        const topPipeHeight = Math.random() * (canvas.height - pipeGap - 50) + 20;
+        pipes.push({ x: canvas.width, top: topPipeHeight });
+      }
+      
+      pipes.forEach((pipe, i) => {
+        pipe.x -= 5;
+        
+        if (pipe.x + pipeWidth < bird.x && pipe.x + pipeWidth + 5 >= bird.x) {
+          score++;
+        }
+        
+        if (bird.x < pipe.x + pipeWidth && bird.x + bird.w > pipe.x) {
+          if (bird.y < pipe.top || bird.y + bird.h > pipe.top + pipeGap) {
+            gameRunning = false;
+            alert(`Game Over! Score: ${score}`);
+            location.reload();
+          }
+        }
+        
+        if (pipe.x < -pipeWidth) pipes.splice(i, 1);
+      });
+    }
+    
+    function draw() {
+      ctx.fillStyle = '#87ceeb';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      ctx.fillStyle = '#ffff00';
+      ctx.fillRect(bird.x, bird.y, bird.w, bird.h);
+      
+      ctx.fillStyle = '#228b22';
+      pipes.forEach(pipe => {
+        ctx.fillRect(pipe.x, 0, pipeWidth, pipe.top);
+        ctx.fillRect(pipe.x, pipe.top + pipeGap, pipeWidth, canvas.height - pipe.top - pipeGap);
+      });
+      
+      document.getElementById('score').textContent = score;
+    }
+    
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+    gameLoop();
+  </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Brick Breaker</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-width: 450px;
+    }
+    h1 { color: #667eea; margin-top: 0; }
+    .game-area { background: #1a1a1a; border-radius: 8px; padding: 10px; margin: 20px 0; }
+    canvas { width: 100%; height: 350px; border: 2px solid #667eea; display: block; border-radius: 6px; }
+    .stats { display: flex; justify-content: space-around; font-size: 1.1em; margin: 20px 0; }
+    .button-group { display: flex; gap: 10px; justify-content: center; }
+    button {
+      padding: 10px 20px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    button:hover { background: #764ba2; transform: translateY(-2px); }
+    .back {
+      background: rgba(102, 126, 234, 0.2);
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧱 Brick Breaker</h1>
+    <div class="stats">
+      <div>Score: <span id="score">0</span></div>
+      <div>Lives: <span id="lives">3</span></div>
+    </div>
+    <div class="game-area">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+    <div style="font-size: 0.9em; color: #666; margin: 10px 0;">Mouse to move paddle • Break all bricks!</div>
+    <div class="button-group">
+      <button onclick="location.reload()">Restart</button>
+      <button class="back" onclick="window.location.href='../games.html'">← Back</button>
+    </div>
+  </div>
+  
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 400;
+    canvas.height = 300;
+    
+    const paddle = { x: canvas.width / 2 - 40, y: canvas.height - 20, w: 80, h: 15, vel: 7 };
+    const ball = { x: canvas.width / 2, y: canvas.height - 50, r: 6, vx: 4, vy: -4 };
+    const bricks = [];
+    let score = 0, lives = 3;
+    let mouseX = canvas.width / 2;
+    
+    for (let row = 0; row < 4; row++) {
+      for (let col = 0; col < 6; col++) {
+        bricks.push({
+          x: col * 65 + 2,
+          y: row * 20 + 10,
+          w: 60,
+          h: 15,
+          active: true
+        });
+      }
+    }
+    
+    document.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+    });
+    
+    function update() {
+      paddle.x = Math.max(0, Math.min(mouseX - paddle.w / 2, canvas.width - paddle.w));
+      
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+      
+      if (ball.x - ball.r < 0 || ball.x + ball.r > canvas.width) ball.vx *= -1;
+      if (ball.y - ball.r < 0) ball.vy *= -1;
+      
+      if (ball.y + ball.r > paddle.y &&
+          ball.x > paddle.x && ball.x < paddle.x + paddle.w) {
+        ball.vy = -Math.abs(ball.vy);
+      }
+      
+      bricks.forEach((brick, i) => {
+        if (!brick.active) return;
+        if (ball.x > brick.x && ball.x < brick.x + brick.w &&
+            ball.y > brick.y && ball.y < brick.y + brick.h) {
+          brick.active = false;
+          ball.vy *= -1;
+          score += 10;
+        }
+      });
+      
+      if (ball.y > canvas.height) {
+        lives--;
+        if (lives <= 0) {
+          alert(`Game Over! Score: ${score}`);
+          location.reload();
+        }
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height - 50;
+      }
+      
+      if (bricks.every(b => !b.active)) {
+        alert(`You Win! Score: ${score}`);
+        location.reload();
+      }
+    }
+    
+    function draw() {
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      ctx.fillStyle = '#667eea';
+      ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h);
+      
+      ctx.fillStyle = '#ffff00';
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.fillStyle = '#ff6b6b';
+      bricks.forEach(brick => {
+        if (brick.active) ctx.fillRect(brick.x, brick.y, brick.w, brick.h);
+      });
+      
+      document.getElementById('score').textContent = score;
+      document.getElementById('lives').textContent = lives;
+    }
+    
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+    gameLoop();
+  </script>
+</body>
+</html>

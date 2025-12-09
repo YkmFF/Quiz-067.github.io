@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Space Blaster - Shoot Em Up</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-width: 500px;
+    }
+    h1 { color: #667eea; margin-top: 0; }
+    .game-area { background: #000; border-radius: 8px; padding: 10px; margin: 20px 0; }
+    canvas { width: 100%; height: 400px; border: 2px solid #667eea; display: block; border-radius: 6px; }
+    .stats { display: flex; justify-content: space-around; margin: 20px 0; font-size: 1.1em; }
+    .button-group { display: flex; gap: 10px; justify-content: center; }
+    button {
+      padding: 10px 20px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    button:hover { background: #764ba2; transform: translateY(-2px); }
+    .back {
+      background: rgba(102, 126, 234, 0.2);
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 Space Blaster</h1>
+    <div class="stats">
+      <div>Score: <span id="score">0</span></div>
+      <div>Wave: <span id="wave">1</span></div>
+    </div>
+    <div class="game-area">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+    <div style="font-size: 0.9em; color: #666; margin: 10px 0;">Arrow Keys to move • Space to shoot</div>
+    <div class="button-group">
+      <button onclick="location.reload()">Restart</button>
+      <button class="back" onclick="window.location.href='../games.html'">← Back</button>
+    </div>
+  </div>
+  
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 400;
+    canvas.height = 500;
+    
+    const player = { x: canvas.width / 2 - 15, y: canvas.height - 40, w: 30, h: 30, vel: 6 };
+    const bullets = [];
+    const enemies = [];
+    const keys = {};
+    let score = 0, wave = 1, gameRunning = true;
+    
+    window.addEventListener('keydown', (e) => {
+      keys[e.key] = true;
+      if (e.key === ' ') bullets.push({ x: player.x + 12, y: player.y, w: 6, h: 15, vel: 8 });
+    });
+    window.addEventListener('keyup', (e) => { keys[e.key] = false; });
+    
+    function spawnEnemies() {
+      if (enemies.length < 5 + wave) {
+        enemies.push({
+          x: Math.random() * (canvas.width - 25),
+          y: -20,
+          w: 25,
+          h: 25,
+          vel: 1 + wave * 0.3
+        });
+      }
+    }
+    
+    function update() {
+      if (keys['ArrowLeft'] && player.x > 0) player.x -= player.vel;
+      if (keys['ArrowRight'] && player.x < canvas.width - player.w) player.x += player.vel;
+      
+      spawnEnemies();
+      
+      bullets.forEach((b, bi) => {
+        b.y -= b.vel;
+        if (b.y < 0) bullets.splice(bi, 1);
+      });
+      
+      enemies.forEach((e, ei) => {
+        e.y += e.vel;
+        bullets.forEach((b, bi) => {
+          if (b.x < e.x + e.w && b.x + b.w > e.x &&
+              b.y < e.y + e.h && b.y + b.h > e.y) {
+            enemies.splice(ei, 1);
+            bullets.splice(bi, 1);
+            score += 10;
+          }
+        });
+        if (e.y > canvas.height) enemies.splice(ei, 1);
+      });
+      
+      if (score % 100 === 0 && score > 0) wave = Math.floor(score / 100) + 1;
+    }
+    
+    function draw() {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      ctx.fillStyle = '#00ff00';
+      ctx.fillRect(player.x, player.y, player.w, player.h);
+      
+      ctx.fillStyle = '#ffff00';
+      bullets.forEach(b => ctx.fillRect(b.x, b.y, b.w, b.h));
+      
+      ctx.fillStyle = '#ff0000';
+      enemies.forEach(e => ctx.fillRect(e.x, e.y, e.w, e.h));
+      
+      document.getElementById('score').textContent = score;
+      document.getElementById('wave').textContent = wave;
+    }
+    
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+    gameLoop();
+  </script>
+</body>
+</html>

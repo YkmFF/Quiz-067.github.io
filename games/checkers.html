@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkers - Strategy Game</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-width: 450px;
+    }
+    h1 { color: #667eea; margin-top: 0; }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(8, 50px);
+      gap: 0;
+      margin: 20px auto;
+      background: #333;
+      border: 3px solid #667eea;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .square {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.8em;
+      user-select: none;
+      border: 1px solid #222;
+    }
+    .light { background: #ddd; }
+    .dark { background: #666; }
+    .square.selected { background: #ffff00 !important; }
+    .info { font-size: 0.9em; color: #666; margin: 10px 0; }
+    .button-group { display: flex; gap: 10px; justify-content: center; }
+    button {
+      padding: 10px 20px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    button:hover { background: #764ba2; transform: translateY(-2px); }
+    .back {
+      background: rgba(102, 126, 234, 0.2);
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>♟️ Checkers</h1>
+    <div class="info">Red (bottom) vs Black (top) • Click to move</div>
+    <div class="board" id="board"></div>
+    <div class="button-group">
+      <button onclick="location.reload()">New Game</button>
+      <button class="back" onclick="window.location.href='../games.html'">← Back</button>
+    </div>
+  </div>
+  
+  <script>
+    const board = Array(64).fill(null);
+    let selected = null;
+    let redTurn = true;
+    
+    // Setup pieces
+    for (let i = 0; i < 24; i++) {
+      if (i < 12) board[i] = 'black';
+      if (i >= 52) board[i] = 'red';
+    }
+    
+    function render() {
+      const boardEl = document.getElementById('board');
+      boardEl.innerHTML = '';
+      board.forEach((piece, idx) => {
+        const row = Math.floor(idx / 8);
+        const col = idx % 8;
+        const isLight = (row + col) % 2 === 0;
+        
+        const square = document.createElement('div');
+        square.className = `square ${isLight ? 'light' : 'dark'}`;
+        if (selected === idx) square.classList.add('selected');
+        
+        if (piece) {
+          square.textContent = piece === 'red' ? '🔴' : '⚫';
+        }
+        
+        square.addEventListener('click', () => handleClick(idx));
+        boardEl.appendChild(square);
+      });
+    }
+    
+    function handleClick(idx) {
+      if (selected === null) {
+        if (board[idx] && ((redTurn && board[idx] === 'red') || (!redTurn && board[idx] === 'black'))) {
+          selected = idx;
+          render();
+        }
+      } else {
+        const row = Math.floor(selected / 8);
+        const col = selected % 8;
+        const newRow = Math.floor(idx / 8);
+        const newCol = idx % 8;
+        
+        if (Math.abs(row - newRow) === 1 && Math.abs(col - newCol) === 1 && board[idx] === null) {
+          board[idx] = board[selected];
+          board[selected] = null;
+          redTurn = !redTurn;
+          selected = null;
+          render();
+        } else {
+          selected = null;
+          render();
+        }
+      }
+    }
+    
+    render();
+  </script>
+</body>
+</html>
