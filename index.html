@@ -5,65 +5,198 @@
   <title>Unblocked Game Launcher</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f7ff;
-      text-align: center;
-      margin-top: 40px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #1a1a1a;
     }
+    
     #main {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.95);
       display: inline-block;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.12);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      max-width: 500px;
+      text-align: center;
     }
     .url {
       margin-top: 20px;
-      font-size: 1.1em;
-      color: #4b7bec;
+      font-size: 0.95em;
+      color: #667eea;
+    }
+    .url a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    .url a:hover {
+      color: #764ba2;
     }
     .score {
-      font-size:2em;
-      margin:20px;
+      font-size: 2.5em;
+      margin: 20px 0;
+      color: #667eea;
+      font-weight: 700;
     }
     #clickBtn {
-      padding: 14px 40px;
-      font-size: 1.2em;
-      background: #70a1ff;
+      padding: 12px 32px;
+      font-size: 1.1em;
+      background: #667eea;
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
+    
     #clickBtn:hover {
-      background: #1e90ff;
+      background: #764ba2;
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      transform: translateY(-2px);
     }
-  </style>
+    
+    #clickBtn:active {
+      transform: translateY(0);
+    }
+    
+    h2 {
+      color: #1a1a1a;
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 1.8em;
+      font-weight: 700;
+    }
+    
+    #searchForm {
+      margin: 20px 0;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    #searchInput {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 1.5px solid #e0e0e0;
+      background: rgba(255, 255, 255, 0.8);
+      color: #1a1a1a;
+      width: 200px;
+      font-size: 0.95em;
+      transition: all 0.3s ease;
+    }
+    
+    #searchInput:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+    }
+    
+    #searchInput::placeholder {
+      color: #999;
+    }
+    
+    #searchBtn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      background: #667eea;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95em;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    #searchBtn:hover {
+      background: #764ba2;
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+      transform: translateY(-1px);
+    }
+    
+    #searchBtn:active {
+      transform: translateY(0);
+    }
+    
+    #gamesBtn {
+      padding: 12px 32px;
+      font-size: 1.1em;
+      background: #764ba2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
+      margin-top: 15px;
+      display: inline-block;
+    }
+    
+    #gamesBtn:hover {
+      background: #667eea;
+      box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+      transform: translateY(-2px);
+    }
+    
+    #gamesBtn:active {
+      transform: translateY(0);
+    }
+    
+    body > div > p {
+      color: #666;
+      font-size: 0.9em;
+      line-height: 1.5;
+      margin: 20px 0 0 0;
+    }
 </head>
 <body>
   <div id="main">
-    <h2>Unblocked Clicker Game</h2>
-    <form id="searchForm" style="margin:16px 0;">
-      <input id="searchInput" type="search" placeholder="Search DuckDuckGo" style="padding:8px 10px;border-radius:6px;border:1px solid #cbd6e2;width:220px;">
-      <button id="searchBtn" type="submit" style="padding:8px 12px;border-radius:6px;border:none;background:#4b7bec;color:#fff;cursor:pointer;margin-left:8px;">Search</button>
-    </form>
+    <h2>Unblocked Games Hub</h2>
+    
     <div class="score" id="score">Score: 0</div>
     <button id="clickBtn">Click Me!</button>
+    
+    <button id="gamesBtn">All Unblocked Games →</button>
+    
+    <form id="searchForm">
+      <input id="searchInput" type="search" placeholder="Search DuckDuckGo">
+      <button id="searchBtn" type="submit">Search</button>
+    </form>
+    
     <div class="url">
-      🔗 Unblocked via: <a href="https://Quiz-67.github.io" target="_blank">Quiz-67.github.io</a>
+      🔗 Via: <a href="https://Quiz-67.github.io" target="_blank">Quiz-67.github.io</a>
     </div>
-    <p style="margin-top:24px;color:gray;">
-      This page lets you play simple games, unblocked at school!<br>
-      Add more games below or modify code for more fun.<br>
-      (Educational use only!)
+    
+    <p>
+      Play games, search the web, and learn!<br>
+      (Educational use only)
     </p>
   </div>
   <script>
     let score = 0;
     const scoreEl = document.getElementById('score');
+    
+    // Click button functionality
     document.getElementById('clickBtn').onclick = () => {
       score++;
       scoreEl.textContent = "Score: " + score;
+    };
+
+    // Games button redirects to games page
+    document.getElementById('gamesBtn').onclick = () => {
+      window.location.href = 'games.html';
     };
 
     // DuckDuckGo search (opens results in a new tab)
