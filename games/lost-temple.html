@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Temple</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        #gameContainer {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            background: #1a1a2e;
+            border: 3px solid #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        canvas { display: block; background: #2a2a3e; }
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #FFD700;
+            font-size: 16px;
+            font-weight: bold;
+            z-index: 10;
+        }
+        #backBtn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background: #FFD700;
+            border: none;
+            color: #1a1a2e;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        #backBtn:hover { background: #FFED4E; }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="ui">
+            <div>Score: <span id="score">0</span></div>
+            <div>Keys: <span id="keys">0/3</span></div>
+            <div>Lives: <span id="lives">❤️❤️❤️</span></div>
+        </div>
+        <button id="backBtn" onclick="window.location.href='games.html'">Back</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let player = { x: 50, y: 300, w: 30, h: 30, speed: 5, lives: 3, score: 0, keys: 0 };
+        let platforms = [];
+        let treasures = [];
+        let traps = [];
+        let keys = [];
+        let gameRunning = true;
+
+        function initGame() {
+            platforms = [
+                { x: 0, y: 550, w: 800, h: 50 },
+                { x: 150, y: 450, w: 200, h: 20 },
+                { x: 500, y: 350, w: 200, h: 20 },
+                { x: 200, y: 250, w: 150, h: 20 },
+                { x: 600, y: 200, w: 150, h: 20 }
+            ];
+            
+            treasures = [
+                { x: 300, y: 350, w: 25, h: 25 },
+                { x: 650, y: 100, w: 25, h: 25 }
+            ];
+            
+            traps = [
+                { x: 250, y: 480, w: 40, h: 20 },
+                { x: 450, y: 380, w: 40, h: 20 }
+            ];
+            
+            keys = [
+                { x: 320, y: 400, w: 15, h: 15 },
+                { x: 680, y: 250, w: 15, h: 15 },
+                { x: 150, y: 150, w: 15, h: 15 }
+            ];
+        }
+
+        function collisionCheck(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.w &&
+                   rect1.x + rect1.w > rect2.x &&
+                   rect1.y < rect2.y + rect2.h &&
+                   rect1.y + rect1.h > rect2.y;
+        }
+
+        let keys_pressed = {};
+        window.addEventListener('keydown', (e) => { keys_pressed[e.key.toLowerCase()] = true; });
+        window.addEventListener('keyup', (e) => { keys_pressed[e.key.toLowerCase()] = false; });
+
+        function update() {
+            if (!gameRunning) return;
+
+            if (keys_pressed['arrowleft'] || keys_pressed['a']) player.x -= player.speed;
+            if (keys_pressed['arrowright'] || keys_pressed['d']) player.x += player.speed;
+            if (keys_pressed['arrowup'] || keys_pressed['w']) player.y -= player.speed;
+            if (keys_pressed['arrowdown'] || keys_pressed['s']) player.y += player.speed;
+
+            player.x = Math.max(0, Math.min(canvas.width - player.w, player.x));
+            player.y = Math.max(0, Math.min(canvas.height - player.h, player.y));
+
+            for (let treasure of treasures) {
+                if (collisionCheck(player, treasure)) {
+                    player.score += 100;
+                    treasures.splice(treasures.indexOf(treasure), 1);
+                }
+            }
+
+            for (let key of keys) {
+                if (collisionCheck(player, key)) {
+                    player.keys++;
+                    keys.splice(keys.indexOf(key), 1);
+                }
+            }
+
+            for (let trap of traps) {
+                if (collisionCheck(player, trap)) {
+                    player.lives--;
+                    if (player.lives <= 0) gameRunning = false;
+                    player.x = 50;
+                    player.y = 300;
+                }
+            }
+
+            if (player.x > 750 && player.keys >= 3) {
+                gameRunning = false;
+                alert(`Victory! Score: ${player.score}`);
+            }
+
+            document.getElementById('score').textContent = player.score;
+            document.getElementById('keys').textContent = `${player.keys}/3`;
+            document.getElementById('lives').textContent = '❤️'.repeat(Math.max(0, player.lives));
+        }
+
+        function draw() {
+            ctx.fillStyle = '#2a2a3e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#8B4513';
+            for (let platform of platforms) {
+                ctx.fillRect(platform.x, platform.y, platform.w, platform.h);
+            }
+
+            ctx.fillStyle = '#FF6B6B';
+            for (let trap of traps) {
+                ctx.fillRect(trap.x, trap.y, trap.w, trap.h);
+            }
+
+            ctx.fillStyle = '#FFD700';
+            for (let treasure of treasures) {
+                ctx.fillRect(treasure.x, treasure.y, treasure.w, treasure.h);
+            }
+
+            ctx.fillStyle = '#FF4500';
+            for (let key of keys) {
+                ctx.fillRect(key.x, key.y, key.w, key.h);
+            }
+
+            ctx.fillStyle = '#00D4FF';
+            ctx.fillRect(player.x, player.y, player.w, player.h);
+
+            if (!gameRunning) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#FFD700';
+                ctx.font = '30px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(player.lives > 0 ? 'Level Complete!' : 'Game Over!', canvas.width / 2, canvas.height / 2);
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        initGame();
+        gameLoop();
+    </script>
+</body>
+</html>
