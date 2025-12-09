@@ -102,195 +102,79 @@
 </head>
 <body>
   <div class="container">
-    <button class="backBtn" onclick="window.location.href='index.html'">← Back to Hub</button>
-    
-    <h1>🎮 Unblocked Games Collection</h1>
-    
-    <h2 style="color: white; margin-top: 30px; margin-bottom: 20px;">🗺️ ADVENTURE GAMES</h2>
-    <div class="games-grid">
-      <div class="game-card">
-        <div class="game-icon">🏰</div>
-        <h2>Dungeon Explorer</h2>
-        <p>Explore dangerous dungeons, collect coins, and survive enemy attacks!</p>
-        <button onclick="window.location.href='games/dungeon-explorer.html'">Play Now</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <button class="backBtn" onclick="window.location.href='index.html'">← Back to Hub</button>
+      <div style="flex:1 1 400px;max-width:800px;">
+        <input id="searchInput" placeholder="Search games, tags, or categories..." style="width:100%;padding:12px 16px;border-radius:12px;border:1px solid rgba(0,0,0,0.08);font-size:16px;" />
       </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🔑</div>
-        <h2>Lost Temple</h2>
-        <p>Navigate platforms to find keys and treasures. Can you escape?</p>
-        <button onclick="window.location.href='games/lost-temple.html'">Play Now</button>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <select id="categoryFilter" style="padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.08);">
+          <option value="">All Categories</option>
+        </select>
+        <button id="clearBtn" class="backBtn" style="background:#fff;color:#667eea;padding:10px 14px;">Clear</button>
       </div>
     </div>
-    
-    <h2 style="color: white; margin-top: 30px; margin-bottom: 20px;">⚔️ ACTION GAMES</h2>
-    <div class="games-grid">
-      <div class="game-card">
-        <div class="game-icon">⚔️</div>
-        <h2>Sword Master</h2>
-        <p>Fight waves of enemies with your sword. Survive as many waves as you can!</p>
-        <button onclick="window.location.href='games/sword-master.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🚀</div>
-        <h2>Space Blaster</h2>
-        <p>Classic space shooter! Dodge enemies and blast them out of the sky.</p>
-        <button onclick="window.location.href='games/space-blaster.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🎯</div>
-        <h2>Bullet Heaven</h2>
-        <p>Shoot enemies and survive waves! Arrow keys move, Space to shoot.</p>
-        <button onclick="window.location.href='games/bullet-heaven.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">☄️</div>
-        <h2>Asteroid Blast</h2>
-        <p>Break asteroids into smaller pieces! Classic arcade action!</p>
-        <button onclick="window.location.href='games/asteroid-blast.html'">Play Now</button>
-      </div>
+
+    <h1>🎮 Games Hub</h1>
+
+    <div id="gamesGrid" class="games-grid" aria-live="polite">
+      <!-- dynamic cards here -->
     </div>
-    
-    <h2 style="color: white; margin-top: 30px; margin-bottom: 20px;">🎯 SKILL GAMES</h2>
-    <div class="games-grid">
-      <div class="game-card">
-        <div class="game-icon">🏹</div>
-        <h2>Precision Shot</h2>
-        <p>Click targets as fast as you can! Test your accuracy and reflexes.</p>
-        <button onclick="window.location.href='games/precision-shot.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">⭕</div>
-        <h2>Tic Tac Toe</h2>
-        <p>Play the classic strategy game. Beat the AI or challenge a friend!</p>
-        <button onclick="window.location.href='games/tic-tac-toe.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🧠</div>
-        <h2>Memory Game</h2>
-        <p>Test your memory by matching pairs. How fast can you find them all?</p>
-        <button onclick="window.location.href='games/memory.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">⌨️</div>
-        <h2>Typing Master</h2>
-        <p>Type as fast as you can! Test your typing speed and accuracy.</p>
-        <button onclick="window.location.href='games/typing-master.html'">Play Now</button>
-      </div>
-    </div>
-    
-    <h2 style="color: white; margin-top: 30px; margin-bottom: 20px;">🏃 OBSTACLE GAMES</h2>
-    <div class="games-grid">
-      <div class="game-card">
-        <div class="game-icon">🏃</div>
-        <h2>Wall Runner</h2>
-        <p>Dodge falling obstacles! How far can you run before hitting one?</p>
-        <button onclick="window.location.href='games/wall-runner.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">⚡</div>
-        <h2>Spike Dodge</h2>
-        <p>Avoid spikes falling from above! Level increases each time you survive.</p>
-        <button onclick="window.location.href='games/spike-dodge.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🐍</div>
-        <h2>Snake Game</h2>
-        <p>Guide the snake to eat food and grow. Don't hit the walls or yourself!</p>
-        <button onclick="window.location.href='games/snake.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🐦</div>
-        <h2>Flappy Bird</h2>
-        <p>Navigate through pipes! How many can you pass? Tap to fly!</p>
-        <button onclick="window.location.href='games/flappy-bird.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🎯</div>
-        <h2>Maze Runner</h2>
-        <p>Navigate the maze to the exit! Don't get lost in the walls.</p>
-        <button onclick="window.location.href='games/maze-runner.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🥋</div>
-        <h2>Ninja Runner</h2>
-        <p>Jump on platforms to escape! Avoid obstacles and climb higher.</p>
-        <button onclick="window.location.href='games/ninja-runner.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🎮</div>
-        <h2>Platform Jumper</h2>
-        <p>Jump on platforms and climb as high as you can! Don't fall!</p>
-        <button onclick="window.location.href='games/platform-jumper.html'">Play Now</button>
-      </div>
-    </div>
-    
-    <h2 style="color: white; margin-top: 30px; margin-bottom: 20px;">👥 TWO-PLAYER GAMES</h2>
-    <div class="games-grid">
-      <div class="game-card">
-        <div class="game-icon">⚽</div>
-        <h2>Two Player Duel</h2>
-        <p>Epic battle between two players! Pass the ball and score points.</p>
-        <button onclick="window.location.href='games/two-player-duel.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🏓</div>
-        <h2>Pong</h2>
-        <p>Two-player ping pong game! Challenge your friend to epic rallies.</p>
-        <button onclick="window.location.href='games/pong.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🎲</div>
-        <h2>Rock Paper Scissors</h2>
-        <p>Challenge the computer! Can you predict its next move?</p>
-        <button onclick="window.location.href='games/rps.html'">Play Now</button>
-      </div>
-    </div>
-    
-    <h2 style="color: white; margin-top: 30px; margin-bottom: 20px;">🧩 PUZZLE GAMES</h2>
-    <div class="games-grid">
-      <div class="game-card">
-        <div class="game-icon">2️⃣</div>
-        <h2>2048</h2>
-        <p>Merge tiles to reach 2048! A strategic number puzzle game.</p>
-        <button onclick="window.location.href='games/2048.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">♟️</div>
-        <h2>Checkers</h2>
-        <p>Classic strategy board game. Jump your opponent's pieces!</p>
-        <button onclick="window.location.href='games/checkers.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🧱</div>
-        <h2>Brick Breaker</h2>
-        <p>Classic breakout game! Destroy all bricks and reach the top score.</p>
-        <button onclick="window.location.href='games/brick-breaker.html'">Play Now</button>
-      </div>
-      
-      <div class="game-card">
-        <div class="game-icon">🖱️</div>
-        <h2>Clicker Game</h2>
-        <p>Click your way to victory! Challenge yourself to get the highest score.</p>
-        <button onclick="window.location.href='index.html'">Play Now</button>
-      </div>
-    </div>
+
+    <div style="text-align:center;color:#fff;margin-top:20px;">Showing <span id="resultsCount">0</span> games</div>
   </div>
+
+  <script>
+    async function loadGames(){
+      const res = await fetch('games/games.json');
+      const games = await res.json();
+      window.__GAMES = games;
+      const cats = [...new Set(games.map(g=>g.category))].sort();
+      const catSel = document.getElementById('categoryFilter');
+      for(const c of cats){
+        const opt = document.createElement('option'); opt.value=c; opt.textContent=c; catSel.appendChild(opt);
+      }
+      renderGames(games);
+    }
+
+    function renderGames(list){
+      const grid = document.getElementById('gamesGrid'); grid.innerHTML='';
+      const countEl = document.getElementById('resultsCount');
+      countEl.textContent = list.length;
+      for(const g of list){
+        const card = document.createElement('div'); card.className='game-card';
+        card.innerHTML = `
+          <div class="game-icon">${g.icon}</div>
+          <h2>${g.title}</h2>
+          <p>${g.description}</p>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <button onclick="location.href='${g.path}'">Play</button>
+            <div style="margin-left:auto;color:#666;font-weight:600">${g.category}</div>
+          </div>`;
+        grid.appendChild(card);
+      }
+    }
+
+    function applyFilters(){
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      const cat = document.getElementById('categoryFilter').value;
+      let out = window.__GAMES.filter(g=>{
+        if(cat && g.category !== cat) return false;
+        if(!q) return true;
+        if(g.title.toLowerCase().includes(q)) return true;
+        if(g.description.toLowerCase().includes(q)) return true;
+        if(g.tags && g.tags.join(' ').toLowerCase().includes(q)) return true;
+        return false;
+      });
+      renderGames(out);
+    }
+
+    document.addEventListener('input', (e)=>{
+      if(e.target && (e.target.id==='searchInput' || e.target.id==='categoryFilter')) applyFilters();
+    });
+    document.getElementById('clearBtn').addEventListener('click', ()=>{document.getElementById('searchInput').value='';document.getElementById('categoryFilter').value='';applyFilters();});
+
+    loadGames().catch(err=>{console.error(err);document.getElementById('gamesGrid').innerHTML='<div style="color:#fff">Failed to load games manifest.</div>'});
+  </script>
 </body>
 </html>
